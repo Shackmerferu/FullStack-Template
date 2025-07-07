@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 
 // Root route to prevent "Route Not Found" error on "/"
 app.get('/', (req, res) => {
-  res.send('API Backend is running and ready to serve requests.');
+  res.send('API Backend is running and ready to serve requests.'); // Simple root response
 });
 
 // Routes

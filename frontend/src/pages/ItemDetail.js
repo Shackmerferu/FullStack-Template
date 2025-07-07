@@ -3,35 +3,35 @@ import { useParams, Link } from 'react-router-dom';
 
 const styles = {
   container: {
-    fontFamily: "'Orbitron', sans-serif",
-    background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
-    color: '#00ffe7',
-    minHeight: '100vh',
+    fontFamily: "'Orbitron', sans-serif", // Custom font for styling
+    background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', // Dark gradient background
+    color: '#00ffe7', // Neon accent color
+    minHeight: '100vh', // Full viewport height
     padding: 20,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    gap: 24,
+    gap: 24, // Space between image and info
   },
   imageWrapper: {
     width: 482,
     height: 500,
-    backgroundColor: 'rgba(0, 255, 231, 0.1)',
-    border: '2px solid #00ffe7',
+    backgroundColor: 'rgba(0, 255, 231, 0.1)', // Semi-transparent background
+    border: '2px solid #00ffe7', // Neon border
     borderRadius: 12,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
+    boxSizing: 'border-box', // Include padding/border in size
+    overflow: 'hidden', // Prevent overflow
   },
   image: {
     maxWidth: '100%',
     maxHeight: '100%',
-    objectFit: 'contain',
+    objectFit: 'contain', // Maintain aspect ratio within container
   },
   infoContainer: {
-    maxWidth: 400,
+    maxWidth: 400, // Limit width of text content
   },
   backLink: {
     color: '#00ffe7',
@@ -42,46 +42,46 @@ const styles = {
     border: '2px solid #00ffe7',
     borderRadius: 8,
     display: 'inline-block',
-    userSelect: 'none',
-    transition: 'background-color 0.3s',
-    outline: 'none',
+    userSelect: 'none', // Prevent text selection on click
+    transition: 'background-color 0.3s', // Smooth hover transition
+    outline: 'none', // Remove focus outline
     marginBottom: 16,
   },
   backLinkHover: {
-    backgroundColor: 'rgba(0, 255, 231, 0.2)',
+    backgroundColor: 'rgba(0, 255, 231, 0.2)', // Hover effect background
   },
 };
 
 function ItemDetail() {
-  const { id } = useParams();
+  const { id } = useParams(); // Extract item id from route params
   const [item, setItem] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [backHover, setBackHover] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state indicator
+  const [error, setError] = useState(false); // Error state indicator
+  const [backHover, setBackHover] = useState(false); // Hover state for back link
 
   useEffect(() => {
     setLoading(true);
     setError(false);
-    fetch('http://localhost:3001/api/items/' + id)
+    fetch('http://localhost:3001/api/items/' + id) // Fetch item data by id
       .then(res => {
-        if (!res.ok) throw new Error('Fetch error');
+        if (!res.ok) throw new Error('Fetch error'); // Handle non-200 status
         return res.json();
       })
       .then(data => {
-        if (!data || !data.name) throw new Error('Item not found');
-        setItem(data);
+        if (!data || !data.name) throw new Error('Item not found'); // Validate data
+        setItem(data); // Set fetched item data
       })
       .catch(() => {
-        setError(true);
+        setError(true); // Set error state on failure
         setItem(null);
       })
-      .finally(() => setLoading(false));
-  }, [id]);
+      .finally(() => setLoading(false)); // End loading state
+  }, [id]); // Re-run effect on id change
 
   if (loading)
     return (
       <div style={styles.container}>
-        <p style={{ color: '#00ffe7', fontWeight: '700' }}>Loading item details...</p>
+        <p style={{ color: '#00ffe7', fontWeight: '700' }}>Loading item details...</p> {/* Loading feedback */}
       </div>
     );
 
@@ -90,13 +90,13 @@ function ItemDetail() {
       <div style={styles.container}>
         <Link
           to="/"
-          style={{ ...styles.backLink, ...(backHover ? styles.backLinkHover : {}) }}
+          style={{ ...styles.backLink, ...(backHover ? styles.backLinkHover : {}) }} // Apply hover styles conditionally
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
         >
           Back to Items
         </Link>
-        <p>Error loading item or item not found.</p>
+        <p>Error loading item or item not found.</p> {/* Error feedback */}
       </div>
     );
 
@@ -104,32 +104,32 @@ function ItemDetail() {
     <div style={styles.container}>
       <div style={styles.imageWrapper}>
         {item.imageUrl ? (
-          <img src={item.imageUrl} alt={item.name} style={styles.image} />
+          <img src={item.imageUrl} alt={item.name} style={styles.image} /> // Show item image
         ) : (
-          <span style={{ color: '#00ffe7', fontWeight: '700' }}>No Image</span>
+          <span style={{ color: '#00ffe7', fontWeight: '700' }}>No Image</span> // Fallback if no image
         )}
       </div>
 
       <div style={styles.infoContainer}>
         <Link
           to="/"
-          style={{ ...styles.backLink, ...(backHover ? styles.backLinkHover : {}) }}
+          style={{ ...styles.backLink, ...(backHover ? styles.backLinkHover : {}) }} // Back link with hover styles
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
         >
           Back to Items
         </Link>
 
-        <h2>{item.name}</h2>
+        <h2>{item.name}</h2> {}
         <p>
-          <strong>Category:</strong> {item.category || 'N/A'}
+          <strong>Category:</strong> {item.category || 'N/A'} {/* Category with fallback */}
         </p>
         <p>
-          <strong>Price:</strong> ${item.price != null ? item.price : 'N/A'}
+          <strong>Price:</strong> ${item.price != null ? item.price : 'N/A'} {/* Price with fallback */}
         </p>
         {item.description && (
           <p>
-            <strong>Description:</strong> {item.description}
+            <strong>Description:</strong> {item.description} {/* Optional description */}
           </p>
         )}
       </div>
