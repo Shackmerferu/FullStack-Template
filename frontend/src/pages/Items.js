@@ -3,69 +3,187 @@ import { Link } from 'react-router-dom';
 import { VariableSizeGrid as Grid } from 'react-window';
 
 const styles = {
-  container: { fontFamily: "'Orbitron', sans-serif", background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)', color: '#00ffe7', minHeight: '100vh', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }, // Main container style
-  placeholderImageSpace: { width: '240px', height: '96px', marginBottom: '30px' }, // Spacer to balance layout
-  buttonItem: { backgroundColor: 'rgba(0, 255, 231, 0.1)', border: '2px solid #00ffe7', borderRadius: '12px', color: '#00ffe7', fontWeight: '700', fontSize: '16px', cursor: 'pointer', textAlign: 'center', textDecoration: 'none', userSelect: 'none', transition: 'all 0.3s', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80px', width: '180px', boxSizing: 'border-box', marginTop: '8px' }, // Button styling for item names
-  itemImageContainer: { width: '180px', height: '200px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }, // Container for item images
-  itemImage: { width: '160px', height: '160px', objectFit: 'cover', borderRadius: '8px', backgroundColor: '#1c2a33', display: 'block' }, // Image style with fixed size and rounded corners
-  cellWrapper: { paddingRight: '2rem', paddingBottom: '4rem', boxSizing: 'border-box' }, // Grid cell padding
-  singleItemWrapper: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '4rem' }, // Style for single item display
-  loading: { fontSize: '18px', fontWeight: '700' }, // Loading text style
-  noResults: { fontSize: '16px', fontWeight: '700', marginTop: 40 }, // No results text style
-  input: { marginBottom: 20, padding: '10px', fontSize: '16px', borderRadius: '8px', border: '1px solid #00ffe7', backgroundColor: 'rgba(0, 255, 231, 0.05)', color: '#00ffe7', width: '100%', maxWidth: '400px', outline: 'none', boxSizing: 'border-box' }, // Search input style
-  headerLink: { alignSelf: 'flex-start', marginBottom: 20, color: '#00ffe7', fontWeight: '700', fontSize: '18px', textDecoration: 'none', padding: '5px 10px', border: '2px solid #00ffe7', borderRadius: '8px', boxSizing: 'content-box', userSelect: 'none', transition: 'background-color 0.3s', outline: 'none' }, // Header link style
-  headerLinkHover: { backgroundColor: 'rgba(0, 255, 231, 0.2)' }, // Hover effect for header link
+  container: {
+    fontFamily: "'Orbitron', sans-serif",
+    background: 'linear-gradient(135deg, #0f2027, #203a43, #2c5364)',
+    color: '#00ffe7',
+    minHeight: '100vh',
+    padding: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  placeholderImageSpace: {
+    width: 240,
+    height: 96,
+    marginBottom: 30,
+  },
+  buttonItem: {
+    backgroundColor: 'rgba(0, 255, 231, 0.1)',
+    border: '2px solid #00ffe7',
+    borderRadius: 12,
+    color: '#00ffe7',
+    fontWeight: 700,
+    fontSize: 16,
+    cursor: 'pointer',
+    textAlign: 'center',
+    textDecoration: 'none',
+    userSelect: 'none',
+    transition: 'all 0.3s',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80,
+    width: 180,
+    boxSizing: 'border-box',
+    marginTop: 8,
+  },
+  buttonItemHover: {
+    backgroundColor: 'rgba(0, 255, 231, 0.3)',
+    borderColor: '#00e0c2',
+    color: '#000',
+  },
+  itemImageContainer: {
+    width: 180,
+    height: 200,
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  itemImage: {
+    width: 160,
+    height: 160,
+    objectFit: 'cover',
+    borderRadius: 8,
+    backgroundColor: '#1c2a33',
+    display: 'block',
+  },
+  cellWrapper: {
+    paddingRight: 32,
+    paddingBottom: 64,
+    boxSizing: 'border-box',
+  },
+  singleItemWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 16,
+    marginTop: 64,
+  },
+  loading: {
+    fontSize: 18,
+    fontWeight: 700,
+  },
+  noResults: {
+    fontSize: 16,
+    fontWeight: 700,
+    marginTop: 40,
+  },
+  input: {
+    marginBottom: 20,
+    padding: 10,
+    fontSize: 16,
+    borderRadius: 8,
+    border: '1px solid #00ffe7',
+    backgroundColor: 'rgba(0, 255, 231, 0.05)',
+    color: '#00ffe7',
+    width: '100%',
+    maxWidth: 400,
+    outline: 'none',
+    boxSizing: 'border-box',
+  },
+  headerLink: {
+    alignSelf: 'flex-start',
+    marginBottom: 20,
+    color: '#00ffe7',
+    fontWeight: 700,
+    fontSize: 18,
+    textDecoration: 'none',
+    padding: '5px 10px',
+    border: '2px solid #00ffe7',
+    borderRadius: 8,
+    boxSizing: 'content-box',
+    userSelect: 'none',
+    transition: 'background-color 0.3s',
+    outline: 'none',
+  },
+  headerLinkHover: {
+    backgroundColor: 'rgba(0, 255, 231, 0.2)',
+  },
 };
 
-function Items() {
-  const [items, setItems] = useState([]); // Items state
-  const [q, setQ] = useState(''); // Debounced search query
-  const [searchTerm, setSearchTerm] = useState(''); // Immediate input value
-  const [loading, setLoading] = useState(false); // Loading indicator
-  const [headerHover, setHeaderHover] = useState(false); // Hover state for header link
-  const itemsPerPage = 1000; // Fetch limit
+// Button with hover effect implemented with local state to apply styles idiomatically
+function HoverButton({ to, children }) {
+  const [isHovered, setIsHovered] = useState(false);
 
+  return (
+    <Link
+      to={to}
+      style={{ ...styles.buttonItem, ...(isHovered ? styles.buttonItemHover : {}) }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function Items() {
+  const [items, setItems] = useState([]);
+  const [query, setQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [headerHover, setHeaderHover] = useState(false);
+  const ITEMS_PER_PAGE = 1000;
+
+  // Debounce input changes to limit API requests
   useEffect(() => {
-    const timer = setTimeout(() => setQ(searchTerm), 200); // Debounce input by 200ms
-    return () => clearTimeout(timer); // Clear timeout on input change
+    const timeoutId = setTimeout(() => setQuery(searchTerm), 200);
+    return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
+  // Fetch items from API with query params
   const fetchData = useCallback(async () => {
-    setLoading(true); // Set loading state before fetch
+    setLoading(true);
     try {
-      const params = new URLSearchParams({ limit: itemsPerPage, q }); // Prepare query params
-      const res = await fetch(`http://localhost:3001/api/items?${params.toString()}`); // Fetch API
-      if (!res.ok) throw new Error('Fetch error'); // Handle non-200 status
-      const json = await res.json();
-      setItems(Array.isArray(json.items) ? json.items : []); // Validate and set items
+      const params = new URLSearchParams({ limit: ITEMS_PER_PAGE, q: query });
+      const response = await fetch(`http://localhost:3001/api/items?${params.toString()}`);
+      if (!response.ok) throw new Error('Fetch error');
+      const data = await response.json();
+      setItems(Array.isArray(data.items) ? data.items : []);
     } catch {
-      setItems([]); // Clear items on error
+      setItems([]);
     } finally {
-      setLoading(false); // Clear loading state
+      setLoading(false);
     }
-  }, [q]);
+  }, [query]);
 
   useEffect(() => {
-    fetchData(); // Fetch on query change
+    fetchData();
   }, [fetchData]);
 
-  const filteredItems = items.filter(item => item.name && item.name.trim() !== '' && item.name.toLowerCase() !== 'newitem'); // Filter out empty and placeholder names
+  // Filter invalid or placeholder items
+  const filteredItems = items.filter(
+    ({ name }) => name && name.trim() !== '' && name.toLowerCase() !== 'newitem'
+  );
 
-  // Layout params
-  const columnCount = 4; // Number of columns in grid
-  const itemCount = filteredItems.length; // Total filtered items
-  const rowCount = Math.ceil(itemCount / columnCount) * 2; // Each item uses 2 rows (image + button)
+  const COLUMN_COUNT = 4;
+  const itemCount = filteredItems.length;
+  const ROW_COUNT = Math.ceil(itemCount / COLUMN_COUNT) * 2; // images and buttons rows
 
-  const getRowHeight = rowIndex => (rowIndex % 2 === 0 ? 200 : 88); // Row height alternates between image and button rows
-  const getColumnWidth = () => 180 + 32; // Fixed column width with padding
+  const getRowHeight = (rowIndex) => (rowIndex % 2 === 0 ? 200 : 88);
+  const getColumnWidth = () => 212;
 
+  // Render grid cell for image (even rows) or button (odd rows)
   const Cell = ({ columnIndex, rowIndex, style }) => {
-    const itemRow = Math.floor(rowIndex / 2); // Calculate item index based on row
-    const itemIndex = itemRow * columnCount + columnIndex; // Calculate item index
-    if (itemIndex >= itemCount) return null; // No cell if out of bounds
+    const itemRow = Math.floor(rowIndex / 2);
+    const itemIndex = itemRow * COLUMN_COUNT + columnIndex;
+    if (itemIndex >= itemCount) return null;
 
     const item = filteredItems[itemIndex];
-    const isImageRow = rowIndex % 2 === 0; // Even rows: images, odd rows: buttons
+    const isImageRow = rowIndex % 2 === 0;
 
     return (
       <div
@@ -85,15 +203,13 @@ function Items() {
               src={item.imageUrl || ''}
               alt={item.name}
               style={styles.itemImage}
-              onError={e => {
-                e.currentTarget.style.display = 'none'; // Hide broken images
-              }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
         ) : (
-          <Link to={`/items/${item.id}`} style={styles.buttonItem}>
+          <HoverButton to={`/items/${item.id}`}>
             {item.name}
-          </Link>
+          </HoverButton>
         )}
       </div>
     );
@@ -102,7 +218,7 @@ function Items() {
   if (loading) {
     return (
       <div style={styles.container}>
-        <p style={styles.loading}>Loading...</p> {/* Loading indicator */}
+        <p style={styles.loading}>Loading...</p>
       </div>
     );
   }
@@ -110,18 +226,18 @@ function Items() {
   if (filteredItems.length === 0) {
     return (
       <div style={styles.container}>
-        <p style={styles.noResults}>No results found</p> {/* No results message */}
+        <p style={styles.noResults}>No results found</p>
       </div>
     );
   }
 
   if (filteredItems.length === 1) {
-    const item = filteredItems[0];
+    const [item] = filteredItems;
     return (
       <div style={styles.container}>
         <Link
           to="/"
-          style={{ ...styles.headerLink, ...(headerHover ? styles.headerLinkHover : {}) }} // Header link with hover
+          style={{ ...styles.headerLink, ...(headerHover ? styles.headerLinkHover : {}) }}
           onMouseEnter={() => setHeaderHover(true)}
           onMouseLeave={() => setHeaderHover(false)}
         >
@@ -133,7 +249,7 @@ function Items() {
           value={searchTerm}
           aria-label="Search items"
           placeholder="Search products..."
-          onChange={e => setSearchTerm(e.target.value)} // Update immediate input value
+          onChange={(e) => setSearchTerm(e.target.value)}
           spellCheck={false}
           autoComplete="off"
           style={styles.input}
@@ -145,25 +261,22 @@ function Items() {
               src={item.imageUrl || ''}
               alt={item.name}
               style={styles.itemImage}
-              onError={e => {
-                e.currentTarget.style.display = 'none'; // Hide broken image
-              }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
-          <Link to={`/items/${item.id}`} style={styles.buttonItem}>
+          <HoverButton to={`/items/${item.id}`}>
             {item.name}
-          </Link>
+          </HoverButton>
         </div>
       </div>
     );
   }
 
-  // Default grid rendering for multiple items
   return (
     <div style={styles.container}>
       <Link
         to="/"
-        style={{ ...styles.headerLink, ...(headerHover ? styles.headerLinkHover : {}) }} // Header link hover effect
+        style={{ ...styles.headerLink, ...(headerHover ? styles.headerLinkHover : {}) }}
         onMouseEnter={() => setHeaderHover(true)}
         onMouseLeave={() => setHeaderHover(false)}
       >
@@ -175,23 +288,23 @@ function Items() {
         value={searchTerm}
         aria-label="Search items"
         placeholder="Search products..."
-        onChange={e => setSearchTerm(e.target.value)} // Search input handler
+        onChange={(e) => setSearchTerm(e.target.value)}
         spellCheck={false}
         autoComplete="off"
         style={styles.input}
       />
 
-      <div style={styles.placeholderImageSpace} /> {/* Spacer for layout alignment */}
+      <div style={styles.placeholderImageSpace} />
 
       <Grid
-        columnCount={columnCount} // Number of columns
-        rowCount={rowCount} // Number of rows (2x for image + button)
-        columnWidth={getColumnWidth} // Width per column
-        rowHeight={getRowHeight} // Height per row
-        height={600} // Grid height
-        width={getColumnWidth() * columnCount} // Grid width
+        columnCount={COLUMN_COUNT}
+        rowCount={ROW_COUNT}
+        columnWidth={getColumnWidth}
+        rowHeight={getRowHeight}
+        height={600}
+        width={getColumnWidth() * COLUMN_COUNT}
       >
-        {Cell} {/* Render cells */}
+        {(props) => <Cell {...props} />}
       </Grid>
     </div>
   );

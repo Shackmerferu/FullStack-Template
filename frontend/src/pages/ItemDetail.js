@@ -120,7 +120,7 @@ function ItemDetail() {
           Back to Items
         </Link>
 
-        <h2>{item.name}</h2> {}
+        <h2>{item.name}</h2> { }
         <p>
           <strong>Category:</strong> {item.category || 'N/A'} {/* Category with fallback */}
         </p>
