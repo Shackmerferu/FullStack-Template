@@ -280,7 +280,7 @@ function Items() {
         onMouseEnter={() => setHeaderHover(true)}
         onMouseLeave={() => setHeaderHover(false)}
       >
-        Items
+        Home
       </Link>
 
       <input
