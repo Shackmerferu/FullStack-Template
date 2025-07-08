@@ -117,7 +117,7 @@ function ItemDetail() {
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
         >
-          Back to Items
+          Back to Home
         </Link>
 
         <h2>{item.name}</h2> { }
