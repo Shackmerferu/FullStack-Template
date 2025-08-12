@@ -1,58 +1,115 @@
-# Take‑Home Assessment
+# Full Stack Items Manager
 
-Welcome, candidate! This project contains **intentional issues** that mimic real‑world scenarios.
-Your task is to refactor, optimize, and fix these problems.
+A full-stack web application for managing items with search, pagination and detailed views. Built with React and Node.js.
 
-## Objectives
+## Features
 
-### 🔧 Backend (Node.js)
+### Frontend
+- Responsive item grid layout with virtualization
+- Real-time search with debouncing
+- Item detail view with navigation
+- Loading states and error handling
+- Memory leak prevention
+- Styled components with hover effects
+- Accessibility considerations
 
-1. **Refactor blocking I/O**  
-   - `src/routes/items.js` uses `fs.readFileSync`. Replace with non‑blocking async operations.
+### Backend
+- RESTful API endpoints for items and stats
+- Server-side pagination and search
+- Asynchronous file operations
+- Request logging and monitoring
+- Error handling middleware
+- Caching for performance optimization
+- CORS security
 
-2. **Performance**  
-   - `GET /api/stats` recalculates stats on every request. Cache results, watch file changes, or introduce a smarter strategy.
+## Tech Stack
 
-3. **Testing**  
-   - Add **unit tests** (Jest) for items routes (happy path + error cases).
+### Frontend
+- React 18
+- React Router 6
+- React Window (virtualization)
+- Custom hooks and context
+- Modern CSS-in-JS styling
 
-### 💻 Frontend (React)
+### Backend
+- Node.js 18
+- Express 4
+- Jest & Supertest
+- Morgan logging
+- CORS
+- File-based storage
 
-1. **Memory Leak**  
-   - `Items.js` leaks memory if the component unmounts before fetch completes. Fix it.
+## Getting Started
 
-2. **Pagination & Search**  
-   - Implement paginated list with server‑side search (`q` param). Contribute to both client and server.
+### Prerequisites
+- Node.js 18.x
+- npm/yarn
 
-3. **Performance**  
-   - The list can grow large. Integrate **virtualization** (e.g., `react-window`) to keep UI smooth.
+### Installation & Running
 
-4. **UI/UX Polish**  
-   - Feel free to enhance styling, accessibility, and add loading/skeleton states.
-
-### 📦 What We Expect
-
-- Idiomatic, clean code with comments where necessary.
-- Solid error handling and edge‑case consideration.
-- Tests that pass via `npm test` in both frontend and backend.
-- A brief `SOLUTION.md` describing **your approach and trade‑offs**.
-
-## Quick Start
-
-node version: 18.XX
+1. Clone the repository
 ```bash
-nvm install 18
-nvm use 18
+git clone https://github.com/Shackmerferu/test6-answer.git
+```
 
-# Terminal 1
+2. Install and start backend
+```bash
 cd backend
 npm install
 npm start
+```
 
-# Terminal 2
+3. Install and start frontend (in new terminal)
+```bash
 cd frontend
 npm install
 npm start
 ```
 
-> The frontend proxies `/api` requests to `http://localhost:3001`.
+The frontend will be available at http://localhost:3000
+The backend API runs at http://localhost:3001
+
+## API Endpoints
+
+### Items
+- `GET /api/items` - List items (supports pagination and search)
+- `GET /api/items/:id` - Get single item
+- `POST /api/items` - Create new item
+
+### Stats
+- `GET /api/stats` - Get item statistics (cached)
+
+## Testing
+
+Run backend tests:
+```bash
+cd backend
+npm test
+```
+
+Run frontend tests:
+```bash
+cd frontend
+npm test
+```
+
+## Project Structure
+
+```
+├── backend/
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── middleware/
+│   │   └── utils/
+│   └── tests/
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   └── state/
+│   └── public/
+└── data/
+```
+
+## License
+
+This project is licensed under the MIT License.
