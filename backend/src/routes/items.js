@@ -1,19 +1,30 @@
 const express = require('express');
-const fs = require('fs').promises; // Use promises API for async file ops
+const fs = require('fs').promises;
 const path = require('path');
 const router = express.Router();
-const DATA_PATH = path.join(__dirname, '../../../data/items.json'); // Path to data file
 
+// Path to the JSON file containing all items data
+const DATA_PATH = path.join(__dirname, '../../../data/items.json');
+
+// Reads and parses the items data from the JSON file
+// Returns a Promise that resolves to the parsed items array
 async function readData() {
   const raw = await fs.readFile(DATA_PATH, 'utf-8'); // Async read file contents
   return JSON.parse(raw); // Parse JSON string to object
 }
 
+// Writes the provided data array back to the JSON file
+// Formats the JSON with proper indentation for readability
 async function writeData(data) {
-  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2)); // Async write pretty JSON string
+  await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
 }
 
-// GET /api/items - list items with optional pagination and search
+// Route: GET /api/items
+// Retrieves a paginated and optionally filtered list of items
+// Supports query parameters:
+// - limit: Number of items per page (default: 50)
+// - page: Page number (default: 1)
+// - q: Search term to filter items by name
 router.get('/', async (req, res, next) => {
   try {
     const data = await readData(); // Read all items
@@ -38,7 +49,9 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET /api/items/:id - get single item by ID
+// Route: GET /api/items/:id
+// Retrieves a single item by its ID
+// Returns 404 if the item is not found
 router.get('/:id', async (req, res, next) => {
   try {
     const data = await readData();
@@ -54,7 +67,10 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-// POST /api/items - create new item
+// Route: POST /api/items
+// Creates a new item with an auto-generated ID
+// Expects item data in the request body
+// Returns the created item with status 201
 router.post('/', async (req, res, next) => {
   try {
     const item = req.body; // Assume JSON body parsed by middleware

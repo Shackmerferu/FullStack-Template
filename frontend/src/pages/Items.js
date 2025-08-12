@@ -2,6 +2,16 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { VariableSizeGrid as Grid } from 'react-window';
 
+// Items page component
+// Displays a virtualized grid of items with search functionality
+// Uses react-window for efficient rendering of large lists
+// Features:
+// - Real-time search filtering
+// - Responsive grid layout
+// - Smooth hover effects
+// - Loading states
+// - Error handling
+
 const styles = {
   container: {
     fontFamily: "'Orbitron', sans-serif",

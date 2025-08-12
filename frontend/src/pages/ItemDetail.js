@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
+// ItemDetail page component
+// Displays detailed information about a single item
+// Features:
+// - Fetches and displays item details by ID
+// - Responsive layout with image display
+// - Loading and error states
+// - Back navigation
+// - Hover effects on interactive elements
+
 const styles = {
   container: {
     fontFamily: "'Orbitron', sans-serif", // Custom font for styling

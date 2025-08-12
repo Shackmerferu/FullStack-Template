@@ -1,12 +1,18 @@
 const express = require('express');
-const fs = require('fs').promises; // Async file operations
+const fs = require('fs').promises;
 const path = require('path');
 const router = express.Router();
-const DATA_PATH = path.join(__dirname, '../../data/items.json'); // Path to items data
 
-let cachedStats = null; // Cache for computed stats
-let lastModified = 0; // Timestamp of last file modification
+// Path to the items data file
+const DATA_PATH = path.join(__dirname, '../../data/items.json');
 
+// Cache storage for computed statistics
+let cachedStats = null;
+// Timestamp of last data file modification
+let lastModified = 0;
+
+// Calculates statistics from the items data
+// Computes total count and average price
 async function calculateStats() {
   const raw = await fs.readFile(DATA_PATH, 'utf-8'); // Read file contents
   const items = JSON.parse(raw); // Parse JSON data
@@ -16,12 +22,16 @@ async function calculateStats() {
   };
 }
 
+// Retrieves the last modification time of the data file
+// Used to determine if cache needs refreshing
 async function getFileModifiedTime() {
-  const stats = await fs.stat(DATA_PATH); // Get file stats metadata
-  return stats.mtimeMs; // Return modification time in milliseconds
+  const stats = await fs.stat(DATA_PATH);
+  return stats.mtimeMs;
 }
 
-// GET /api/stats - serve cached stats, refresh if file updated
+// Route: GET /api/stats
+// Returns cached statistics about items
+// Automatically refreshes cache if data file has changed
 router.get('/', async (req, res, next) => {
   try {
     const mtime = await getFileModifiedTime(); // Check current file mod time
